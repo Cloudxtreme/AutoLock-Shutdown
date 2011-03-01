@@ -12,7 +12,7 @@
 #AutoIt3Wrapper_UseX64=N
 #AutoIt3Wrapper_Res_Comment=http://xan-manning.co.uk/
 #AutoIt3Wrapper_Res_Description=AutoLock/Shutdown
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.4
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.5
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=P
 #AutoIt3Wrapper_Res_Language=2057
 #AutoIt3Wrapper_Res_LegalCopyright=Copyright © 2010 Xan Manning
@@ -116,6 +116,7 @@ While 1
 			$repeat = 0
 			While $repeat < 10
 				Sleep(6000)
+				$currentTime = @HOUR & ":" & @MIN
 				$repeat = $repeat + 1
 			WEnd
 		EndIf
