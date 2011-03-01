@@ -12,7 +12,7 @@
 #AutoIt3Wrapper_UseX64=N
 #AutoIt3Wrapper_Res_Comment=http://xan-manning.co.uk/
 #AutoIt3Wrapper_Res_Description=AutoLock/Shutdown
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.2
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.3
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=P
 #AutoIt3Wrapper_Res_Language=2057
 #AutoIt3Wrapper_Res_LegalCopyright=Copyright © 2010 Xan Manning
@@ -153,7 +153,7 @@ Func DisplayTValue()
 		GUICtrlSetState(-1, $GUI_CHECKED)
 	EndIf
 	$Label2 = GUICtrlCreateLabel("minutes", 80, 64, 40, 17)
-	$IMinutes = GUICtrlCreateInput($sleepTimeX, 24, 56, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER,$WS_HSCROLL,$WS_VSCROLL))
+	$IMinutes = GUICtrlCreateInput($sleepTimeX, 24, 56, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER))
 	GUICtrlSetLimit(1, 3)
 	$Time = GUICtrlCreateRadio("When the time is:", 24, 88, 113, 17)
 	If $TimeoutValue > 0 Then
@@ -162,10 +162,10 @@ Func DisplayTValue()
 	
 	$savedTime = StringSplit($actionTime, ":")
 	
-	$Hour = GUICtrlCreateInput($savedTime[1], 24, 112, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER,$WS_HSCROLL,$WS_VSCROLL))
+	$Hour = GUICtrlCreateInput($savedTime[1], 24, 112, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER))
 	GUICtrlSetLimit(1, 2)
 	$Label3 = GUICtrlCreateLabel(":", 80, 112, 7, 25)
-	$Minutes = GUICtrlCreateInput($savedTime[2], 88, 112, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER,$WS_HSCROLL,$WS_VSCROLL))
+	$Minutes = GUICtrlCreateInput($savedTime[2], 88, 112, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER))
 	GUICtrlSetLimit(1, 2)
 	$OK = GUICtrlCreateButton("OK", 40, 144, 107, 25)
 	GUICtrlSetOnEvent($OK, "SaveTValue")

@@ -85,7 +85,7 @@
 				<property name="MaxLength" vt="Int8">3</property>
 				<property name="TabOrder" vt="Int8">3</property>
 				<property name="Text" vt="String">5</property>
-				<property name="CtrlStyle" vt="Int32">1345527936</property>
+				<property name="CtrlStyle" vt="Int32">1342382208</property>
 				<property name="CtrlExStyle" vt="Int16">512</property>
 				<property name="Resizing" vt="Set">DockHeight</property>
 			</properties>
@@ -114,7 +114,7 @@
 				<property name="MaxLength" vt="Int8">2</property>
 				<property name="TabOrder" vt="Int8">5</property>
 				<property name="Text" vt="String">2</property>
-				<property name="CtrlStyle" vt="Int32">1345527936</property>
+				<property name="CtrlStyle" vt="Int32">1342382208</property>
 				<property name="CtrlExStyle" vt="Int16">512</property>
 				<property name="Resizing" vt="Set">DockHeight</property>
 			</properties>
@@ -125,7 +125,7 @@
 				<property name="Left" vt="Int8">80</property>
 				<property name="Top" vt="Int8">112</property>
 				<property name="Width" vt="Int8">7</property>
-				<property name="Height" vt="Int8">25</property>
+				<property name="Height" vt="Int8">17</property>
 				<property name="Caption" vt="String">:</property>
 				<property name="TabOrder" vt="Int8">6</property>
 				<property name="HaveVariable" vt="False">False</property>
@@ -143,7 +143,7 @@
 				<property name="Height" vt="Int8">21</property>
 				<property name="TabOrder" vt="Int8">7</property>
 				<property name="Text" vt="String">30</property>
-				<property name="CtrlStyle" vt="Int32">1345527936</property>
+				<property name="CtrlStyle" vt="Int32">1342382208</property>
 				<property name="CtrlExStyle" vt="Int16">512</property>
 				<property name="Resizing" vt="Set">DockHeight</property>
 			</properties>
