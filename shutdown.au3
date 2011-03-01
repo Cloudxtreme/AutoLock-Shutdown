@@ -12,7 +12,7 @@
 #AutoIt3Wrapper_UseX64=N
 #AutoIt3Wrapper_Res_Comment=http://xan-manning.co.uk/
 #AutoIt3Wrapper_Res_Description=AutoLock/Shutdown
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.5
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.6
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=P
 #AutoIt3Wrapper_Res_Language=2057
 #AutoIt3Wrapper_Res_LegalCopyright=Copyright © 2010 Xan Manning
@@ -42,6 +42,7 @@ Global $TimeoutAction					= IniRead("timeoutaction.ini", "config", "TimeoutActio
 Global $TimeoutValue					= IniRead("timeoutaction.ini", "config", "TimeoutValue", 0)
 Global $sleepTimeX						= IniRead("timeoutaction.ini", "config", "TimeoutMinutes", 5)
 Global $actionTime						= IniRead("timeoutaction.ini", "config", "TimeoutTime", "02:30")
+Global $caffeine						= False
 
 ;---------------Set initial variables----------------
 
@@ -76,31 +77,22 @@ While 1
 	If $TimeoutValue < 1 Then
 		$currentpos = MouseGetPos()
 		$sleepTime = (1000 * 60 * $sleepTimeX)
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
-		Sleep(Int($sleepTime/10))
-		$currentpos = MouseGetPos()
+		$repeat = 0
+		While $repeat < 10
+			If $TimeoutValue < 1 Then
+				Sleep(Int($sleepTime/10))
+			EndIf
+			$currentpos = MouseGetPos()
+			$repeat = $repeat + 1
+		WEnd
 		If $lastpos[0] = $currentpos[0] And $lastpos[1] = $currentpos[1] Then
 			If $TimeoutAction < 1 Then
-				Send("#l")
+				;Send("#l")
+				DllCall("user32.dll", "int", "LockWorkStation")
+				$lastpos = $currentpos
 			Else
 				Shutdown(12)
+				$lastpos = $currentpos
 			EndIf
 		EndIf
 		$lastpos = $currentpos
@@ -109,18 +101,23 @@ While 1
 		;MsgBox(64, "Current Time", "The time is now... " & $currentTime)
 		If $currentTime == $actionTime Then
 			If $TimeoutAction < 1 Then
-				Send("#l")
+				;Send("#l")
+				DllCall("user32.dll", "int", "LockWorkStation")
 			Else
 				Shutdown(12)
 			EndIf
 			$repeat = 0
 			While $repeat < 10
-				Sleep(6000)
+				If $TimeoutValue > 0 Then
+					Sleep(6000)
+				EndIf
 				$currentTime = @HOUR & ":" & @MIN
 				$repeat = $repeat + 1
 			WEnd
 		EndIf
-		Sleep(10000)
+		If $TimeoutValue > 0 Then
+			Sleep(10000)
+		EndIf
 	EndIf
 WEnd
 
@@ -161,6 +158,7 @@ Func DisplayTValue()
 	$Label2 = GUICtrlCreateLabel("minutes", 80, 64, 40, 17)
 	$IMinutes = GUICtrlCreateInput($sleepTimeX, 24, 56, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER))
 	GUICtrlSetLimit(1, 3)
+	GUICtrlSetOnEvent($IMinutes, "setIdleSelected")
 	$Time = GUICtrlCreateRadio("When the time is:", 24, 88, 113, 17)
 	If $TimeoutValue > 0 Then
 		GUICtrlSetState(-1, $GUI_CHECKED)
@@ -170,9 +168,11 @@ Func DisplayTValue()
 	
 	$Hour = GUICtrlCreateInput($savedTime[1], 24, 112, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER))
 	GUICtrlSetLimit(1, 2)
+	GUICtrlSetOnEvent($Hour, "setTimeSelected")
 	$Label3 = GUICtrlCreateLabel(":", 80, 112, 7, 25)
 	$Minutes = GUICtrlCreateInput($savedTime[2], 88, 112, 49, 21, BitOR($GUI_SS_DEFAULT_INPUT,$ES_NUMBER))
 	GUICtrlSetLimit(1, 2)
+	GUICtrlSetOnEvent($Minutes, "setTimeSelected")
 	$OK = GUICtrlCreateButton("OK", 40, 144, 107, 25)
 	GUICtrlSetOnEvent($OK, "SaveTValue")
 	GUISetState(@SW_SHOW)
@@ -232,6 +232,16 @@ Func SaveTValue()
 	IniWrite("timeoutaction.ini", "config", "TimeoutTime", $actionTime)
 	IniWrite("timeoutaction.ini", "config", "TimeoutMinutes", $sleepTimeX)
 	OnClose()
+EndFunc
+
+Func setTimeSelected()
+	GUICtrlSetState($Time, $GUI_CHECKED)
+	GUICtrlSetState($Idle, $GUI_UNCHECKED)
+EndFunc
+
+Func setIdleSelected()
+	GUICtrlSetState($Time, $GUI_UNCHECKED)
+	GUICtrlSetState($Idle, $GUI_CHECKED)
 EndFunc
 
 Func ExitEvent()
