@@ -12,7 +12,7 @@
 #AutoIt3Wrapper_UseX64=N
 #AutoIt3Wrapper_Res_Comment=http://xan-manning.co.uk/
 #AutoIt3Wrapper_Res_Description=AutoLock/Shutdown
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.6
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.9
 #AutoIt3Wrapper_Res_FileVersion_AutoIncrement=P
 #AutoIt3Wrapper_Res_Language=2057
 #AutoIt3Wrapper_Res_LegalCopyright=Copyright © 2010 Xan Manning
@@ -48,6 +48,8 @@ Global $caffeine					= False
 
 $sleepTime = (60 * $sleepTimeX) - 1
 $lastpos = MouseGetPos()
+$lastTime = @HOUR & ":" & @MIN
+$currentTime = $lastTime
     
 ;---------------Build UI----------------
 TraySetClick(16)
@@ -78,9 +80,9 @@ While 1
 		$currentpos = MouseGetPos()
 		$sleepTime = 60 * $sleepTimeX
 		$repeat = 0
-		While $repeat < 1000
-			If $TimeoutValue < 1 Then
-				Sleep($sleepTime)
+		While $repeat < 100
+			If $TimeoutValue < 1 And $lastpos[0] = $currentpos[0] And $lastpos[1] = $currentpos[1] Then
+				Sleep($sleepTime * 10)
 			EndIf
 			$currentpos = MouseGetPos()
 			$repeat = $repeat + 1
@@ -97,27 +99,29 @@ While 1
 		EndIf
 		$lastpos = $currentpos
 	Else
-		$currentTime = @HOUR & ":" & @MIN
+		If $lastTime <> $currentTime Then
+			$lastTime = $currentTime
+			;ExitEvent()
+		EndIf
 		;MsgBox(64, "Current Time", "The time is now... " & $currentTime)
 		If $currentTime == $actionTime Then
 			If $TimeoutAction < 1 Then
 				;Send("#l")
 				DllCall("user32.dll", "int", "LockWorkStation")
+				$lastTime = $currentTime
 			Else
 				Shutdown(12)
+				$lastTime = $currentTime
 			EndIf
-			$repeat = 0
-			While $repeat < 1000
-				If $TimeoutValue > 0 Then
-					Sleep(60)
-				EndIf
-				$currentTime = @HOUR & ":" & @MIN
-				$repeat = $repeat + 1
-			WEnd
 		EndIf
-		If $TimeoutValue > 0 Then
-			Sleep(10000)
-		EndIf
+		$repeat = 0
+		While $repeat < 1000
+			If $TimeoutValue > 0 And $lastTime == $currentTime Then
+				Sleep(60)
+			EndIf
+			$currentTime = @HOUR & ":" & @MIN
+			$repeat = $repeat + 1
+		WEnd
 	EndIf
 WEnd
 

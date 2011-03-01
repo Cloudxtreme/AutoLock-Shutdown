@@ -1,1 +1,1 @@
-upx.exe --best --all-methods --all-filters --lzma --ultra-brute Caffeine.exe & pause
+upx.exe --best --all-methods --all-filters --lzma --ultra-brute shutdown.exe & pause
