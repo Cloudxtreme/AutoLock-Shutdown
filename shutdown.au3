@@ -31,22 +31,22 @@ Opt("TrayMenuMode",1); no default tray menuitems
 
 Global $TRAY_CHECKED					= 1
 Global $TRAY_UNCHECKED					= 4
-Global $Lock							= 0
-Global $Shutdown						= 0
-Global $Idle							= 0
-Global $Time							= 0
-Global $Hour							= 0
-Global $Minutes							= 0
-Global $IMinutes						= 0
+Global $Lock						= 0
+Global $Shutdown					= 0
+Global $Idle						= 0
+Global $Time						= 0
+Global $Hour						= 0
+Global $Minutes						= 0
+Global $IMinutes					= 0
 Global $TimeoutAction					= IniRead("timeoutaction.ini", "config", "TimeoutAction", 0)
 Global $TimeoutValue					= IniRead("timeoutaction.ini", "config", "TimeoutValue", 0)
-Global $sleepTimeX						= IniRead("timeoutaction.ini", "config", "TimeoutMinutes", 5)
-Global $actionTime						= IniRead("timeoutaction.ini", "config", "TimeoutTime", "02:30")
-Global $caffeine						= False
+Global $sleepTimeX					= IniRead("timeoutaction.ini", "config", "TimeoutMinutes", 5)
+Global $actionTime					= IniRead("timeoutaction.ini", "config", "TimeoutTime", "02:30")
+Global $caffeine					= False
 
 ;---------------Set initial variables----------------
 
-$sleepTime = (1000 * 60 * $sleepTimeX) - 1
+$sleepTime = (60 * $sleepTimeX) - 1
 $lastpos = MouseGetPos()
     
 ;---------------Build UI----------------
@@ -76,11 +76,11 @@ TraySetToolTip("AutoLock/Shutdown")
 While 1
 	If $TimeoutValue < 1 Then
 		$currentpos = MouseGetPos()
-		$sleepTime = (1000 * 60 * $sleepTimeX)
+		$sleepTime = 60 * $sleepTimeX
 		$repeat = 0
-		While $repeat < 10
+		While $repeat < 1000
 			If $TimeoutValue < 1 Then
-				Sleep(Int($sleepTime/10))
+				Sleep($sleepTime)
 			EndIf
 			$currentpos = MouseGetPos()
 			$repeat = $repeat + 1
@@ -107,9 +107,9 @@ While 1
 				Shutdown(12)
 			EndIf
 			$repeat = 0
-			While $repeat < 10
+			While $repeat < 1000
 				If $TimeoutValue > 0 Then
-					Sleep(6000)
+					Sleep(60)
 				EndIf
 				$currentTime = @HOUR & ":" & @MIN
 				$repeat = $repeat + 1
